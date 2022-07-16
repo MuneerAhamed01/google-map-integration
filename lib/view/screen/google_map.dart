@@ -19,6 +19,8 @@ class _MyHomePageState extends State<MyHomePage> {
   LocationData? _currentLocation;
   static double? _currentLatitude;
   static double? _currentLongitude;
+  TextEditingController controllerOne = TextEditingController();
+  TextEditingController controllerTwo = TextEditingController();
 
   void getCurrentLocation() async {
     Location location = Location();
@@ -63,7 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         initialCameraPosition: _kGooglePlex,
                         mapType: MapType.normal,
                         onTap: (position) {
-                          
                           context.read<MarkerofmapBloc>().add(MarkerPerform(
                               position: position, marker: state.marker));
                         },
@@ -73,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           gpsIcon(),
-                          bottomContainer(height),
+                          bottomContainer(height, state.marker,controllerOne,controllerTwo),
                         ],
                       )
                     ],

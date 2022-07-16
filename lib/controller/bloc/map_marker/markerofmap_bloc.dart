@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
@@ -18,6 +19,15 @@ class MarkerofmapBloc extends Bloc<MarkerofmapEvent, MarkerofmapState> {
                     'latitude:${event.position.latitude},longitude:${event.position.longitude}')),
       );
       emit(MarkerofmapOnMarking(marker: event.marker));
+    });
+    on<MarkerPerformSearching>((event, emit) async {
+      List<Location> locations = await locationFromAddress(
+        event.positonAddress,
+      );
+      final position = LatLng(locations[0].latitude, locations[0].longitude);
+
+      add(MarkerPerform(position: position, marker: event.marker));
+      // emit(MarkerofmapOnMarking(marker: event.marker,));
     });
   }
 }

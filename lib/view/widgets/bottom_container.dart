@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-Container bottomContainer(double height) {
+Container bottomContainer(double height,Set<Marker> marker,TextEditingController start,TextEditingController end) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
     height: height / 3.3,
@@ -13,12 +14,15 @@ Container bottomContainer(double height) {
     child: Column(
       children: [
         TextField(
+          controller: start,
           decoration: textfieldDecoration(label: "Start"),
+          
         ),
         const SizedBox(
           height: 10,
         ),
         TextField(
+          controller: end,
           decoration: textfieldDecoration(label: "Destination"),
         ),
         const SizedBox(
@@ -39,8 +43,10 @@ Container bottomContainer(double height) {
               borderRadius: BorderRadius.circular(20),
             ),
             child: MaterialButton(
-              onPressed: () {},
-              child: Text(
+              onPressed: () {
+
+              },
+              child: const Text(
                 "Show Direction",
                 style: TextStyle(fontSize: 27, color: Colors.white),
               ),
