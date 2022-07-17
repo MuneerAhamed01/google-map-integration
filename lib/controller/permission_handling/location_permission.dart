@@ -1,24 +1,24 @@
-  import 'package:location/location.dart';
+import 'package:flutter/services.dart';
+import 'package:location/location.dart';
 
 void askPermissionLocation() async {
-    final location = Location();
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-    // LocationData locationData;
+  // print("cominy");
+  final location = Location();
+  bool _serviceEnabled;
+  PermissionStatus permissionGranted;
 
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return;
-      }
-    }
+  try {
+    _serviceEnabled = await location.serviceEnabled();
+  } on PlatformException catch (err) {
+    // print ("Platform exception calling serviceEnabled(): $err");q
+    _serviceEnabled = false;
+  }
 
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
+  permissionGranted = await location.hasPermission();
+  if (permissionGranted == PermissionStatus.denied) {
+    permissionGranted = await location.requestPermission();
+    if (permissionGranted == PermissionStatus.granted) {
+      return;
     }
   }
+}

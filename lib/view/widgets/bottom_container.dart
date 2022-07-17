@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:googlemapimplementation/controller/bloc/map_marker/markerofmap_bloc.dart';
 
-Container bottomContainer(double height,Set<Marker> marker,TextEditingController start,TextEditingController end) {
+Container bottomContainer(
+    {required double height,
+    required Set<Marker> marker,
+    required Set<Polyline> polyLine,
+    required TextEditingController start,
+    required TextEditingController end,
+    required BuildContext context,
+    required String text}) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
     height: height / 3.3,
@@ -16,7 +25,13 @@ Container bottomContainer(double height,Set<Marker> marker,TextEditingController
         TextField(
           controller: start,
           decoration: textfieldDecoration(label: "Start"),
-          
+          onSubmitted: (value) {
+            context.read<MarkerofmapBloc>().add(MarkerPerformSearching(
+                marker: marker,
+                polyLine: polyLine,
+                positonAddress: value,
+                markerId: "Start Position"));
+          },
         ),
         const SizedBox(
           height: 10,
@@ -24,12 +39,20 @@ Container bottomContainer(double height,Set<Marker> marker,TextEditingController
         TextField(
           controller: end,
           decoration: textfieldDecoration(label: "Destination"),
+          onSubmitted: (value) {
+            print("dddddddd");
+            context.read<MarkerofmapBloc>().add(MarkerPerformSearching(
+                marker: marker,
+                polyLine: polyLine,
+                positonAddress: value,
+                markerId: "End Position"));
+          },
         ),
         const SizedBox(
           height: 15,
         ),
-        const Text("DISTANCE : 383.43Km",
-            style: TextStyle(
+        Text(text,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             )),
         const SizedBox(
@@ -44,7 +67,12 @@ Container bottomContainer(double height,Set<Marker> marker,TextEditingController
             ),
             child: MaterialButton(
               onPressed: () {
-
+                // GeoCodingTrying().getPlaceResult(start.text);
+                if (start.text.isNotEmpty && end.text.isNotEmpty) {
+                  context
+                      .read<MarkerofmapBloc>()
+                      .add(GetThePolyine(marker: marker, polyLine: polyLine));
+                }
               },
               child: const Text(
                 "Show Direction",
